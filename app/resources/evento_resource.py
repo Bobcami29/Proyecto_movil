@@ -21,8 +21,7 @@ class EventoResource(Resource):
             hora_inicio=datetime.fromisoformat(data['hora_inicio']).time() if data.get('hora_inicio') else None,
             hora_fin=datetime.fromisoformat(data['hora_fin']).time() if data.get('hora_fin') else None,
             tipo=data.get('tipo'),
-            recordatorio=data.get('recordatorio'),
-            repeticion=data.get('repeticion')
+            recordatorio=data.get('recordatorio')
         )
         db.session.add(nuevo_evento)
         db.session.commit()
@@ -38,7 +37,6 @@ class EventoResource(Resource):
         evento.hora_fin = datetime.fromisoformat(data['hora_fin']).time() if data.get('hora_fin') else evento.hora_fin
         evento.tipo = data.get('tipo', evento.tipo)
         evento.recordatorio = data.get('recordatorio', evento.recordatorio)
-        evento.repeticion = data.get('repeticion', evento.repeticion)
         db.session.commit()
         return evento.to_dict()
 
