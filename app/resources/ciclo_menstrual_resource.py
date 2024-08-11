@@ -1,5 +1,7 @@
 from flask import request, jsonify
 from flask_restful import Resource
+from app.models.ciclo_menstual import CicloMenstrual
+from app.extensions import db
 from datetime import datetime
 
 class CicloMenstrualResource(Resource):
