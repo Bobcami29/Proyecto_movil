@@ -13,6 +13,6 @@ def init_app(app):
     api.add_resource(EventoResource, '/eventos', '/eventos/<int:evento_id>')      
     api.add_resource(CicloMenstrualResource, '/ciclos', '/ciclos/<int:ciclo_id>')
     api.add_resource(SintomaResource, '/sintomas', '/sintomas/<int:sintoma_id>')
-    api.add_resource(EstadoAnimoResource, '/estados-animo', '/estados-animo/<int:estado_animo_id>')
+    api.add_resource(EstadoAnimoResource, '/estados-animo', '/estados-animo/<int:estado_id>')
     api.add_resource(MedicamentoResource, '/medicamentos', '/medicamentos/<int:medicamento_id>')
     api.add_resource(PrediccionResource, '/predicciones', '/predicciones/<int:prediccion_id>')
