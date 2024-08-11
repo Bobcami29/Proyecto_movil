@@ -38,6 +38,4 @@ class CicloMenstrualResource(Resource):
         ciclo = CicloMenstrual.query.get_or_404(ciclo_id)
         db.session.delete(ciclo)
         db.session.commit()
-        response = make_response('', 204)
-        response.headers['X-Status-Message'] = 'Ciclo menstrual eliminado exitosamente'
-        return response
+        return {'mensaje': 'Ciclo menstrual eliminado exitosamente'}, 200

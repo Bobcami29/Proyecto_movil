@@ -36,5 +36,4 @@ class PrediccionResource(Resource):
         prediccion = Prediccion.query.get_or_404(prediccion_id)
         db.session.delete(prediccion)
         db.session.commit()
-        response.headers['X-Status-Message'] = 'Predicción eliminado exitosamente'
-        return response
+        return {'mensaje': 'Predicción eliminada exitosamente'}, 200

@@ -36,5 +36,4 @@ class SintomaResource(Resource):
         sintoma = Sintoma.query.get_or_404(sintoma_id)
         db.session.delete(sintoma)
         db.session.commit()
-        response.headers['X-Status-Message'] = 'Síntoma eliminado exitosamente'
-        return response
+        return {'mensaje': 'Síntoma eliminado exitosamente'}, 200

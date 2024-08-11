@@ -31,5 +31,4 @@ class MedicamentoResource(Resource):
         medicamento = Medicamento.query.get_or_404(medicamento_id)
         db.session.delete(medicamento)
         db.session.commit()
-        response.headers['X-Status-Message'] = 'Medicamento eliminado exitosamente'
-        return response
+        return {'mensaje': ' Medicamento eliminado exitosamente'}, 200

@@ -46,5 +46,4 @@ class EventoResource(Resource):
         evento = Evento.query.get_or_404(evento_id)
         db.session.delete(evento)
         db.session.commit()
-        response.headers['X-Status-Message'] = 'Evento eliminado exitosamente'
-        return response
+        return {'mensaje': 'Evento eliminado exitosamente'}, 200

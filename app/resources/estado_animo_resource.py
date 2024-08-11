@@ -34,5 +34,4 @@ class EstadoAnimoResource(Resource):
         estado = EstadoAnimo.query.get_or_404(estado_id)
         db.session.delete(estado)
         db.session.commit()
-        response.headers['X-Status-Message'] = 'Estado de ánimo eliminado exitosamente'
-        return response
+        return {'mensaje': 'Estado de ánimo eliminado exitosamente'}, 200
