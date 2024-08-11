@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request
 from flask_restful import Resource
 from app.models.prediccion import Prediccion
 from app.extensions import db
@@ -8,9 +8,9 @@ class PrediccionResource(Resource):
     def get(self, prediccion_id=None):
         if prediccion_id:
             prediccion = Prediccion.query.get_or_404(prediccion_id)
-            return jsonify(prediccion.to_dict())
+            return prediccion.to_dict()
         predicciones = Prediccion.query.all()
-        return jsonify([p.to_dict() for p in predicciones])
+        return [p.to_dict() for p in predicciones]
 
     def post(self):
         data = request.get_json()
@@ -21,7 +21,7 @@ class PrediccionResource(Resource):
         )
         db.session.add(nueva_prediccion)
         db.session.commit()
-        return jsonify(nueva_prediccion.to_dict()), 201
+        return nueva_prediccion.to_dict(), 201
 
     def put(self, prediccion_id):
         prediccion = Prediccion.query.get_or_404(prediccion_id)
@@ -30,10 +30,11 @@ class PrediccionResource(Resource):
         prediccion.fecha_fin_prediccion = datetime.fromisoformat(data.get('fecha_fin_prediccion', prediccion.fecha_fin_prediccion.isoformat()))
         prediccion.tipo = data.get('tipo', prediccion.tipo)
         db.session.commit()
-        return jsonify(prediccion.to_dict())
+        return prediccion.to_dict()
 
     def delete(self, prediccion_id):
         prediccion = Prediccion.query.get_or_404(prediccion_id)
         db.session.delete(prediccion)
         db.session.commit()
-        return '', 204
+        response.headers['X-Status-Message'] = 'Predicción eliminado exitosamente'
+        return response

@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request
 from flask_restful import Resource
 from app.models.evento import Evento
 from app.extensions import db
@@ -8,9 +8,9 @@ class EventoResource(Resource):
     def get(self, evento_id=None):
         if evento_id:
             evento = Evento.query.get_or_404(evento_id)
-            return jsonify(evento.to_dict())
+            return evento.to_dict()
         eventos = Evento.query.all()
-        return jsonify([e.to_dict() for e in eventos])
+        return [e.to_dict() for e in eventos]
 
     def post(self):
         data = request.get_json()
@@ -26,7 +26,7 @@ class EventoResource(Resource):
         )
         db.session.add(nuevo_evento)
         db.session.commit()
-        return jsonify(nuevo_evento.to_dict()), 201
+        return nuevo_evento.to_dict(), 201
 
     def put(self, evento_id):
         evento = Evento.query.get_or_404(evento_id)
@@ -40,10 +40,11 @@ class EventoResource(Resource):
         evento.recordatorio = data.get('recordatorio', evento.recordatorio)
         evento.repeticion = data.get('repeticion', evento.repeticion)
         db.session.commit()
-        return jsonify(evento.to_dict())
+        return evento.to_dict()
 
     def delete(self, evento_id):
         evento = Evento.query.get_or_404(evento_id)
         db.session.delete(evento)
         db.session.commit()
-        return '', 204
+        response.headers['X-Status-Message'] = 'Evento eliminado exitosamente'
+        return response

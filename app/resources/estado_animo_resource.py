@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request
 from flask_restful import Resource
 from app.models.estado_animo import EstadoAnimo
 from app.extensions import db
@@ -8,9 +8,9 @@ class EstadoAnimoResource(Resource):
     def get(self, estado_id=None):
         if estado_id:
             estado = EstadoAnimo.query.get_or_404(estado_id)
-            return jsonify(estado.to_dict())
+            return estado.to_dict()
         estados = EstadoAnimo.query.all()
-        return jsonify([e.to_dict() for e in estados])
+        return [e.to_dict() for e in estados]
 
     def post(self):
         data = request.get_json()
@@ -20,7 +20,7 @@ class EstadoAnimoResource(Resource):
         )
         db.session.add(nuevo_estado)
         db.session.commit()
-        return jsonify(nuevo_estado.to_dict()), 201
+        return nuevo_estado.to_dict(), 201
 
     def put(self, estado_id):
         estado = EstadoAnimo.query.get_or_404(estado_id)
@@ -28,10 +28,11 @@ class EstadoAnimoResource(Resource):
         estado.tipo = data.get('tipo', estado.tipo)
         estado.fecha = datetime.fromisoformat(data.get('fecha', estado.fecha.isoformat()))
         db.session.commit()
-        return jsonify(estado.to_dict())
+        return estado.to_dict()
 
     def delete(self, estado_id):
         estado = EstadoAnimo.query.get_or_404(estado_id)
         db.session.delete(estado)
         db.session.commit()
-        return '', 204
+        response.headers['X-Status-Message'] = 'Estado de ánimo eliminado exitosamente'
+        return response

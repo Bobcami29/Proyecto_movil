@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request
 from flask_restful import Resource
 from app.models.sintoma import Sintoma
 from app.extensions import db
@@ -8,9 +8,9 @@ class SintomaResource(Resource):
     def get(self, sintoma_id=None):
         if sintoma_id:
             sintoma = Sintoma.query.get_or_404(sintoma_id)
-            return jsonify(sintoma.to_dict())
+            return sintoma.to_dict()
         sintomas = Sintoma.query.all()
-        return jsonify([s.to_dict() for s in sintomas])
+        return [s.to_dict() for s in sintomas]
 
     def post(self):
         data = request.get_json()
@@ -21,7 +21,7 @@ class SintomaResource(Resource):
         )
         db.session.add(nuevo_sintoma)
         db.session.commit()
-        return jsonify(nuevo_sintoma.to_dict()), 201
+        return nuevo_sintoma.to_dict(), 201
 
     def put(self, sintoma_id):
         sintoma = Sintoma.query.get_or_404(sintoma_id)
@@ -30,10 +30,11 @@ class SintomaResource(Resource):
         sintoma.intensidad = data.get('intensidad', sintoma.intensidad)
         sintoma.fecha = datetime.fromisoformat(data.get('fecha', sintoma.fecha.isoformat()))
         db.session.commit()
-        return jsonify(sintoma.to_dict())
+        return sintoma.to_dict()
 
     def delete(self, sintoma_id):
         sintoma = Sintoma.query.get_or_404(sintoma_id)
         db.session.delete(sintoma)
         db.session.commit()
-        return '', 204
+        response.headers['X-Status-Message'] = 'Síntoma eliminado exitosamente'
+        return response
